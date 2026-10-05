@@ -17,7 +17,7 @@
 ### Overview
 **CamVLM** is a vision-language framework that actively controls the viewpoints of real-world cameras to acquire task-relevant visual evidence in surveillance scenarios.
 
-Training LVLMs to control real-world cameras is constrained by the lack of large-scale viewpoint-action trajectories collected from physical surveillance systems. To address this, we introduce a virtual camera simulation scheme. Specifically, we treat the full video frame as a panoramic observation space and a local region within the frame as the current camera viewpoint. Within this space, CamVLM adjusts the viewpoint through parameterized translation and zoom operations according to the position and scale of the target object in the field of view. Based on this formulation, CamVLM learns the camera control policy through SFT and RL. For deployment on physical cameras, the predicted actions and parameters can be converted into executable camera control commands according to the specifications of the camera hardware.
+Training LVLMs to control real-world cameras is constrained by the lack of large-scale viewpoint-action trajectories collected from interactions between target objects and physical surveillance cameras. To address this, we introduce a virtual camera simulation scheme. Specifically, we treat the full video frame as a panoramic observation space and a local region within the frame as the current camera viewpoint. Within this space, CamVLM adjusts the viewpoint through parameterized translation and zoom operations according to the position and scale of the target object in the field of view. Based on this formulation, CamVLM learns the camera control policy through SFT and RL. For deployment on real-world surveillance cameras, the predicted actions and parameters can be converted into executable camera control commands according to the camera hardware specifications, such as the horizontal/vertical rotation range, angular resolution, field of view, and optical zoom or focal-length range.
 
 <img src="assets/camvlm.png">
 
@@ -87,7 +87,7 @@ datasets/camtrack_53k/
 
 ### UDVideoQA*
 
-Download the `Set_03` and `Set_20` subsets from [UDVideoQA](https://huggingface.co/datasets/UDVideoQA/Urban_Dynamics_VideoQA_dataset) and place them under `datasets/udvideoqa/`:
+We use the large-scale urban traffic surveillance video question answering dataset [UDVideoQA](https://huggingface.co/datasets/UDVideoQA/Urban_Dynamics_VideoQA_dataset) as one of our evaluation benchmarks, which covers urban intersection scenarios under diverse traffic, weather, and illumination conditions. Since the original test split is no longer available, we construct UDVideoQA* with permission from the original authors using Set 03 and Set 20 from the released dataset, which provide the greatest question diversity. Please download the `Set_03` and `Set_20` subsets from the official dataset and place them under `datasets/udvideoqa/`:
 
 ```text
 datasets/udvideoqa/
@@ -121,7 +121,7 @@ bash scripts/train/rl/run_rl_vllm.sh
 
 ## 📊 Evaluation
 
-We use an LLM-as-a-judge to score predictions on both CCTV-Anomaly and UDVideoQA*. Set `OPENAI_API_KEY` before evaluation. Optionally, set `OPENAI_BASE_URL` to specify an OpenAI-compatible endpoint.
+For benchmark evaluation, we use an LLM-as-a-judge protocol to score model predictions on both CCTV-Anomaly and UDVideoQA*. Before evaluation, please set `OPENAI_API_KEY`; other compatible LLM API endpoints can also be configured if needed. For deployment on real-world surveillance cameras, the predicted actions and parameters can be converted into executable camera control commands according to the hardware specifications, such as the horizontal/vertical rotation range, angular resolution, field of view, and optical zoom or focal-length range.
 
 ### CCTV-Anomaly
 
