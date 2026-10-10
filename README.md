@@ -127,19 +127,19 @@ For benchmark evaluation, we use an LLM-as-a-judge protocol to score model predi
 
 CCTV-Anomaly has three evaluation settings:
 
-#### Full-frame passive viewpoint
+#### Conventional full-frame passive viewpoint
 
 ```bash
 bash scripts/eval/cctv_anomaly/eval_full.sh
 ```
 
-#### Center 1/9 passive viewpoint
+#### Center 1/9 passive viewpoint (simulating a local camera-view region within the panoramic observation space)
 
 ```bash
 bash scripts/eval/cctv_anomaly/eval_passive.sh
 ```
 
-#### Dynamic viewpoint
+#### Dynamic viewpoint (simulating a local camera-view region within the panoramic observation space)
 
 ```bash
 bash scripts/eval/cctv_anomaly/eval_dynamic.sh
@@ -149,13 +149,13 @@ bash scripts/eval/cctv_anomaly/eval_dynamic.sh
 
 UDVideoQA* has two evaluation settings:
 
-#### Center 1/9 passive viewpoint
+#### Center 1/9 passive viewpoint (simulating a local camera-view region within the panoramic observation space)
 
 ```bash
 bash scripts/eval/udvideoqa/eval_passive.sh
 ```
 
-#### Dynamic viewpoint
+#### Dynamic viewpoint (simulating a local camera-view region within the panoramic observation space)
 
 ```bash
 bash scripts/eval/udvideoqa/eval_dynamic.sh
