@@ -2,7 +2,7 @@
 
 # Thinking with Cameras: Active Visual Reasoning via Dynamic Viewpoint Control for Surveillance Video Understanding
 
-<a href="https://scholar.google.com/citations?user=yYi80ToAAAAJ&hl=en">Xiao Zhang</a><sup>1,2</sup>&emsp;
+<a href="https://xiaozhang79.github.io">Xiao Zhang</a><sup>1,2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=u_RNsOUAAAAJ&hl=en">Wang Zeng</a><sup>2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=wrNd--oAAAAJ&hl=en">Sheng Jin</a><sup>2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=KZn9NWEAAAAJ&hl=en">Wentao Liu</a><sup>2</sup>&emsp;
@@ -15,9 +15,16 @@
 </div>
 
 ### Overview
-**CamVLM** is a vision-language framework that actively controls the viewpoints of real-world cameras to acquire task-relevant visual evidence in surveillance scenarios.
+We propose a novel *Thinking with Cameras* paradigm that dynamically controls real-world surveillance camera viewpoints to actively acquire task-relevant visual evidence.
 
-Training LVLMs to control real-world cameras is constrained by the lack of large-scale viewpoint-action trajectories collected from interactions between target objects and physical surveillance cameras. To address this, we introduce a virtual camera simulation scheme. Specifically, we treat the full video frame as a panoramic observation space and a local region within the frame as the current camera viewpoint. Within this space, CamVLM adjusts the viewpoint through parameterized translation and zoom operations according to the position and scale of the target object in the field of view. Based on this formulation, CamVLM learns the camera control policy through SFT and RL. For deployment on real-world surveillance cameras, the predicted actions and parameters can be converted into executable camera control commands according to the camera hardware specifications, such as the horizontal/vertical rotation range, angular resolution, field of view, and optical zoom or focal-length range.
+**😢 Existing Challenges.**
+Training LVLMs to dynamically control the viewpoints of real-world surveillance cameras to acquire task-relevant visual evidence is constrained by the lack of large-scale viewpoint-action interaction trajectories between physical cameras and target objects.
+
+**⭐ Our Solution.**
+To address this limitation, we introduce a virtual camera simulation scheme. Specifically, we treat the full video frame as a panoramic observation space and a local region within the frame as the current camera viewpoint. Within this space, the viewpoint is dynamically adjusted through parameterized translation and zoom operations according to the position and scale of the target object in the field of view. Based on this formulation, we introduce two high-quality, large-scale datasets, CCTV-Anomaly and CamTrack-53K, for learning surveillance anomaly understanding via SFT and camera viewpoint control via SFT and RL, respectively.
+
+**👁️ Real-world Deployment.**
+For deployment on real-world surveillance cameras, the learned actions and their associated parameters can be converted into executable camera control commands based on the camera hardware specifications, such as horizontal and vertical rotation ranges, angular resolution, field of view, and optical zoom or focal-length ranges.
 
 <img src="assets/camvlm.png">
 
@@ -25,7 +32,7 @@ Training LVLMs to control real-world cameras is constrained by the lack of large
 
 ## 🚀 News
 
-**[2026/09]** Code, the CamVLM model, and the CCTV-Anomaly and CamTrack-53K datasets have been open-sourced.
+**[2026/09]** Code, CamVLM-8B model, and the CCTV-Anomaly and CamTrack-53K datasets have been open-sourced.
 
 **[2026/09]** CamVLM paper is released.
 
@@ -87,7 +94,7 @@ datasets/camtrack_53k/
 
 ### UDVideoQA*
 
-We use the large-scale urban traffic surveillance video question answering dataset [UDVideoQA](https://huggingface.co/datasets/UDVideoQA/Urban_Dynamics_VideoQA_dataset) as one of our evaluation benchmarks, which covers urban intersection scenarios under diverse traffic, weather, and illumination conditions. Since the original test split is no longer available, we construct UDVideoQA* with permission from the original authors using Set 03 and Set 20 from the released dataset, which provide the greatest question diversity. Please download the `Set_03` and `Set_20` subsets from the official dataset and place them under `datasets/udvideoqa/`:
+We use the large-scale urban traffic surveillance video question answering dataset [UDVideoQA](https://huggingface.co/datasets/UDVideoQA/Urban_Dynamics_VideoQA_dataset) as one of our evaluation benchmarks, which covers urban intersection scenarios under diverse traffic, weather, and illumination conditions. Since the original test split is no longer available, we construct UDVideoQA* with permission from the original authors using Set 03 and Set 20 from the released dataset, which provide the greatest question diversity. Download the `Set_03` and `Set_20` subsets from the official dataset and place them under `datasets/udvideoqa/`:
 
 ```text
 datasets/udvideoqa/
@@ -105,7 +112,7 @@ We provide the trained [CamVLM-8B](https://huggingface.co/collections/xiaozhang7
 
 ### SFT
 
-Jointly train on CCTV-Anomaly and CamTrack-53K. The model is saved under `ckpts/CamVLM-SFT/`:
+Jointly train on CCTV-Anomaly and CamTrack-53K-SFT:
 
 ```bash
 bash scripts/train/sft/run_sft.sh
@@ -113,7 +120,7 @@ bash scripts/train/sft/run_sft.sh
 
 ### RL
 
-Start from `ckpts/CamVLM-SFT/` using the CamTrack-53K RL annotations. The model is saved under `ckpts/CamVLM-RL/`:
+Train on CamTrack-53K-RL starting from the SFT model:
 
 ```bash
 bash scripts/train/rl/run_rl_vllm.sh
@@ -121,11 +128,11 @@ bash scripts/train/rl/run_rl_vllm.sh
 
 ## 📊 Evaluation
 
-For benchmark evaluation, we use an LLM-as-a-judge protocol to score model predictions on both CCTV-Anomaly and UDVideoQA*. Before evaluation, please set `OPENAI_API_KEY`; other compatible LLM API endpoints can also be configured if needed. For deployment on real-world surveillance cameras, the predicted actions and parameters can be converted into executable camera control commands according to the hardware specifications, such as the horizontal/vertical rotation range, angular resolution, field of view, and optical zoom or focal-length range.
+For benchmark evaluation, we use an LLM-as-a-judge protocol to score model predictions on both CCTV-Anomaly and UDVideoQA*. Set `OPENAI_API_KEY` before evaluation. Other compatible LLM API endpoints can also be configured as needed. For deployment on real-world surveillance cameras, the predicted actions and their associated parameters can be converted into executable camera control commands based on the hardware specifications, such as the horizontal and vertical rotation ranges, angular resolution, field of view, and optical zoom or focal-length ranges.
 
 ### CCTV-Anomaly
 
-CCTV-Anomaly has three evaluation settings:
+Three evaluation settings on CCTV-Anomaly:
 
 #### Conventional full-frame passive viewpoint
 
@@ -133,13 +140,13 @@ CCTV-Anomaly has three evaluation settings:
 bash scripts/eval/cctv_anomaly/eval_full.sh
 ```
 
-#### Center 1/9 passive viewpoint (simulating a local camera-view region within the panoramic observation space)
+#### Center 1/9 passive viewpoint (Simulating camera viewpoints (local regions) within a panoramic observation space (full frame))
 
 ```bash
 bash scripts/eval/cctv_anomaly/eval_passive.sh
 ```
 
-#### Dynamic viewpoint (simulating a local camera-view region within the panoramic observation space)
+#### Dynamic viewpoint (Simulating camera viewpoints (local regions) within a panoramic observation space (full frame))
 
 ```bash
 bash scripts/eval/cctv_anomaly/eval_dynamic.sh
@@ -147,15 +154,15 @@ bash scripts/eval/cctv_anomaly/eval_dynamic.sh
 
 ### UDVideoQA*
 
-UDVideoQA* has two evaluation settings:
+Two evaluation settings on UDVideoQA*:
 
-#### Center 1/9 passive viewpoint (simulating a local camera-view region within the panoramic observation space)
+#### Center 1/9 passive viewpoint (Simulating camera viewpoints (local regions) within a panoramic observation space (full frame))
 
 ```bash
 bash scripts/eval/udvideoqa/eval_passive.sh
 ```
 
-#### Dynamic viewpoint (simulating a local camera-view region within the panoramic observation space)
+#### Dynamic viewpoint (Simulating camera viewpoints (local regions) within a panoramic observation space (full frame))
 
 ```bash
 bash scripts/eval/udvideoqa/eval_dynamic.sh
@@ -163,7 +170,7 @@ bash scripts/eval/udvideoqa/eval_dynamic.sh
 
 ## 💬 Contact
 
-If you have any questions about the paper, codebase, or experimental setup, please feel free to contact [xiaozhang0479@gmail.com](mailto:xiaozhang0479@gmail.com).
+If you have any questions about the paper, code, datasets, or experimental setup, please feel free to contact [xiaozhang0479@gmail.com](mailto:xiaozhang0479@gmail.com).
 
 ## 📢 Citation
 
