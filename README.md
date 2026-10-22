@@ -2,7 +2,7 @@
 
 # Thinking with Cameras: Active Visual Reasoning via Dynamic Viewpoint Control for Surveillance Video Understanding
 
-<a href="https://xiaozhang79.github.io">Xiao Zhang</a><sup>1,2</sup>&emsp;
+<a href="https://scholar.google.com/citations?user=yYi80ToAAAAJ&hl=en">Xiao Zhang</a><sup>1,2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=u_RNsOUAAAAJ&hl=en">Wang Zeng</a><sup>2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=wrNd--oAAAAJ&hl=en">Sheng Jin</a><sup>2</sup>&emsp;
 <a href="https://scholar.google.com/citations?user=KZn9NWEAAAAJ&hl=en">Wentao Liu</a><sup>2</sup>&emsp;
@@ -18,7 +18,7 @@
 We propose a novel *Thinking with Cameras* paradigm that dynamically controls real-world surveillance camera viewpoints to actively acquire task-relevant visual evidence.
 
 **😢 Existing Challenges.**
-Training LVLMs to dynamically control the viewpoints of real-world surveillance cameras to acquire task-relevant visual evidence is constrained by the lack of large-scale viewpoint-action interaction trajectories between physical cameras and target objects.
+LVLMs have recently achieved remarkable progress in general-purpose video understanding, yet their application to real-world surveillance cameras remains challenging due to the lack of large-scale domain-specific datasets and the limitation of passive observation from fixed viewpoints. In surveillance scenarios, critical visual evidence can be easily missed when targets are distant, small, occluded, or move beyond the current camera view. However, training LVLMs to dynamically control real-world surveillance camera viewpoints to actively acquire task-relevant visual evidence is constrained by the lack of large-scale viewpoint-action interaction trajectories between physical cameras and target objects.
 
 **⭐ Our Solution.**
 To address this limitation, we introduce a virtual camera simulation scheme. Specifically, we treat the full video frame as a panoramic observation space and a local region within the frame as the current camera viewpoint. Within this space, the viewpoint is dynamically adjusted through parameterized translation and zoom operations according to the position and scale of the target object in the field of view. Based on this formulation, we introduce two high-quality, large-scale datasets, CCTV-Anomaly and CamTrack-53K, for learning surveillance anomaly understanding via SFT and camera viewpoint control via SFT and RL, respectively.
